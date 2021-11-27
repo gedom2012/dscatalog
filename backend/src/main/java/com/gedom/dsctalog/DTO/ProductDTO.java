@@ -5,12 +5,13 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.gedom.dsctalog.entities.Category;
 import com.gedom.dsctalog.entities.Product;
 
 public class ProductDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String name;
 	private String description;
 	private double price;
@@ -22,7 +23,7 @@ public class ProductDTO implements Serializable {
 	public ProductDTO() {
 	}
 
-	public ProductDTO(long id, String name, String description, double price, String imgUrl, Instant date) {
+	public ProductDTO(Long id, String name, String description, double price, String imgUrl, Instant date) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -30,15 +31,23 @@ public class ProductDTO implements Serializable {
 		this.imgUrl = imgUrl;
 		this.date = date;
 	}
+	
+	public ProductDTO(Product entity) {
+		id = entity.getId();
+		name = entity.getName();
+		description = entity.getDescription();
+		price = entity.getPrice();
+		imgUrl = entity.getImgUrl();
+		date = entity.getDate();
+	}
 
-	public ProductDTO(Product product, CategoryDTO category) {
-		id = product.getId();
-		name = product.getName();
-		description = product.getDescription();
-		price = product.getPrice();
-		imgUrl = product.getImgUrl();
-		date = product.getDate();
-		categories.add(category);
+	public ProductDTO(Product entity, Set<Category> categories) {
+		this(entity); // return the constructor with  this same signature 
+		/*
+		 * Alter order function
+		 * Listing all elements returned in the category entity list, and to adding each element in the DTO list
+		 */
+		categories.forEach(x -> this.categories.add(new CategoryDTO(x))); 
 	}
 
 	public long getId() {
