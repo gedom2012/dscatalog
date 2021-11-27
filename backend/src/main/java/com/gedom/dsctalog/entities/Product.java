@@ -25,6 +25,8 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long Id;
 	private String name;
+	
+	@Column(columnDefinition = "TEXT")
 	private String description;
 	private double price;
 	private String imgUrl;
