@@ -60,6 +60,7 @@ public class ProductService {
 		try {
 			Product entity = repository.getOne(id); // getOne == return a entity without access the database.
 			copyDtoToEntity(dto, entity);
+			repository.save(entity);
 			return new ProductDTO(entity, entity.getCategories());
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found " + id);
