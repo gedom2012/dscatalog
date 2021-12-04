@@ -1,6 +1,7 @@
 package com.gedom.dsctalog.services;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -19,12 +20,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.gedom.dsctalog.DTO.ProductDTO;
 import com.gedom.dsctalog.entities.Product;
 import com.gedom.dsctalog.repositories.ProductRepository;
+import com.gedom.dsctalog.services.exceptions.DataBaseException;
 import com.gedom.dsctalog.services.exceptions.ResourceNotFoundException;
 import com.gedom.dsctalog.tests.factories.Factory;
 
@@ -71,12 +76,31 @@ public class ProductServiceTests {
 	}
 
 	@Test
-	public void deleteShouldResourceNotFoundExceptionWhenIdDoesNotExist() {
+	public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
 		assertThrows(ResourceNotFoundException.class, () -> {
 			service.delete(nonExistingId);
 		});
 
 		verify(repository, times(1)).deleteById(nonExistingId);
+	}
+	
+	@Test
+	public void deleteShouldThrowDataBaseExceptionWhenIdisDependent() {
+		assertThrows(DataBaseException.class, () -> {
+			service.delete(dependentId);
+		});
+
+		verify(repository, times(1)).deleteById(dependentId);
+	}
+
+	@Test
+	public void findAllPagedShouldReturnPage() {
+		Pageable pageable = PageRequest.of(0, 10);
+		
+		Page<ProductDTO> result = service.findAllPaged(pageable);
+		
+		assertNotNull(result);
+		verify(repository, times(1)).findAll(pageable);
 	}
 
 }
