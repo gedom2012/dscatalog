@@ -16,7 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import com.gedom.dsctalog.entities.Product;
 
 @DataJpaTest
-public class ProductRepositoyTests {
+public class ProductRepositoryTests {
 
 	@Autowired
 	private ProductRepository repository;
