@@ -54,8 +54,8 @@ public class ProductResourceTests {
 		when(service.findAllPaged(any())).thenReturn(page);
 		when(service.findById(existingId)).thenReturn(productDTO);
 		when(service.findById(nonExistingId)).thenThrow(ResourceNotFoundException.class);
-		when(service.update(existingId, eq(any()))).thenReturn(productDTO);
-		when(service.update(nonExistingId, eq(any()))).thenThrow(ResourceNotFoundException.class);
+		when(service.update(eq(existingId), any())).thenReturn(productDTO);
+		when(service.update(eq(nonExistingId), any())).thenThrow(ResourceNotFoundException.class);
 	}
 
 	@Test
