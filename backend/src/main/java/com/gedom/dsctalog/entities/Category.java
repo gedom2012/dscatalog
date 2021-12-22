@@ -34,10 +34,7 @@ public class Category implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updatedAt;
 
-	@ManyToMany
-	@JoinTable(name = "tb_product_category", 
-				joinColumns = @JoinColumn(name = "category_id"), 
-				inverseJoinColumns = @JoinColumn(name = "product_id"))
+	@ManyToMany(mappedBy = "categories")	
 	Set<Product> products = new HashSet<>();
 
 	public Category() {
