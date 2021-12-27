@@ -1,13 +1,29 @@
 package com.gedom.dsctalog.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "tb_role")
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String authority;
+	
+	@ManyToMany(mappedBy = "roles")
+	private Set<User> users = new HashSet<>();
 
 	public Role() {
 	}
@@ -32,6 +48,10 @@ public class Role implements Serializable {
 
 	public void setAuthority(String authority) {
 		this.authority = authority;
+	}	
+
+	public Set<User> getUsers() {
+		return users;
 	}
 
 	@Override
