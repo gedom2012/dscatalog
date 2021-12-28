@@ -42,7 +42,7 @@ public class ProductService {
 			Optional<Product> obj = repository.findById(id);
 			Product entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
 			return new ProductDTO(entity, entity.getCategories());
-		}catch(EntityNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found " + id);
 		}
 	}
@@ -50,7 +50,7 @@ public class ProductService {
 	@Transactional
 	public ProductDTO insert(ProductDTO productDTO) {
 		Product entity = new Product();
-		copyDtoToEntity(productDTO, entity);		
+		copyDtoToEntity(productDTO, entity);
 		entity = repository.save(entity);
 		return new ProductDTO(entity, entity.getCategories());
 	}
@@ -86,7 +86,8 @@ public class ProductService {
 		entity.setPrice(productDTO.getPrice());
 
 		entity.getCategories().clear();
-		for (CategoryDTO catDto : productDTO.getCategories()) { // pegando todas as categorias que retornaram no DTO e copiando para minha entidade
+		for (CategoryDTO catDto : productDTO.getCategories()) { // pegando todas as categorias que retornaram no DTO e
+																// copiando para minha entidade
 			Category category = categoryRepository.getOne(catDto.getId());
 			entity.getCategories().add(category);
 		}
