@@ -9,11 +9,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gedom.dsctalog.DTO.RoleDTO;
 import com.gedom.dsctalog.DTO.UserDTO;
+import com.gedom.dsctalog.DTO.UserInsertDTO;
 import com.gedom.dsctalog.entities.Role;
 import com.gedom.dsctalog.entities.User;
 import com.gedom.dsctalog.repositories.RoleRepository;
@@ -23,6 +25,9 @@ import com.gedom.dsctalog.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserRepository repository;
@@ -48,9 +53,10 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserDTO insert(UserDTO dto) {
+	public UserDTO insert(UserInsertDTO dto) {
 		User entity = new User();
 		copyDtoToEntity(entity, dto);
+		entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 		repository.save(entity);
 		return new UserDTO(entity);
 	}
@@ -67,6 +73,7 @@ public class UserService {
 		}
 	}
 
+	@Transactional
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);

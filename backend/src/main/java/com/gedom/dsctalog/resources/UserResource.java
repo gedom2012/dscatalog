@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gedom.dsctalog.DTO.UserDTO;
+import com.gedom.dsctalog.DTO.UserInsertDTO;
 import com.gedom.dsctalog.services.UserService;
 
 @Controller
@@ -39,7 +40,7 @@ public class UserResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO dto) {
+	public ResponseEntity<UserDTO> insert(@RequestBody UserInsertDTO dto) {
 		UserDTO userDTO = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDTO.getId())
 				.toUri();
@@ -53,7 +54,7 @@ public class UserResource {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 
